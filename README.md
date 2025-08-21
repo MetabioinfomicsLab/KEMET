@@ -28,24 +28,20 @@ The program is designed to have an easy installation procedure on UNIX-based mac
 This tool was meant to have few external dependencies to ensure stability.  
 
 
-## General Setup process and use - Conda environment
-
-Refer to the [Setup wiki page](https://github.com/Matteopaluh/KEMET/wiki/1-Setup-process-using-a-Conda-environment) to properly set the working directory.  
-Moreover it is important to follow the instructions to place relevant input files in the appropriate subdirectories and using proper format for said files.  
-
------
 # Command line (minimal required arguments)
 ```
-./kemet.py [FASTA_file] -a [FORMAT] --hmm_mode [MODE] --gsmm_mode [MODE] (--skip_hmm) (--skip_gsmm) (--no_genome)
+./kemet.py [FASTA_file] [annotation_file] -a [FORMAT] --hmm_mode [MODE] --gsmm_mode [MODE] (--skip_hmm) (--skip_gsmm) (--no_genome)
 ```
 
 `[FASTA_file]`: FASTA file indication of the MAG/Genome of interest (with or without path indication e.g. `genomes/bin1.fasta`). With further arguments it can also be the indication of a KEGG annotation file.  
+
+`[annotation_file]`: corresponding annotation file.
 
 `-a [FORMAT]`: program used to annotate KEGG KOs, i.e. KEGG annotation format (either eggnog / kaas / kofamkoala) - used to generate KEGG MODULES recap tables. Default file extension must be maintained (e.g. `.emapper.annotations`, `.ko`)  
 
 `--hmm_mode [MODE]`: when HMM analysis is desired, use this parameter to indicate a subset of KOs to search further using profile HMMs. `[MODE]` should be either one of `onebm`, `module`, `kos`, as described in the [wiki pages](https://github.com/Matteopaluh/KEMET/wiki).  
 
-`--gsmm_mode [MODE]`: when GSMM/GEM gapfilling is desired, use this parameter to indicate whether to perform de-novo GSMM/GEM reconstruction or add reactions to an existing model. `[MODE]` should be either `denovo` or `existing`, respectively, as described in the [wiki pages](https://github.com/Matteopaluh/KEMET/wiki).  
+`--gsmm_mode [MODE]`: when GSMM/GEM gapfilling is desired, use this parameter to indicate whether to perform de-novo GSMM/GEM reconstruction or add reactions to an existing model. `[MODE]` should be either `denovo`, `existing`, or `onlyfasta` respectively, as described in the [wiki pages](https://github.com/Matteopaluh/KEMET/wiki).  
 
 `--skip_hmm`: use this to stop after KEGG MODULES Completeness Evaluation. The only output would be organized tables of metabolic potential.  
 
