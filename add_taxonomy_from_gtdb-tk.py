@@ -113,16 +113,14 @@ def kegg_taxonomy_from_gtdbtk_NCBI_mapping(ncbi_from_gtdb_file, genomes_info_fil
             print(f"{genome} not included: not enough KEGG Organisms with the same phylum. Check script help page (-h).")
 
     if path.isfile(genomes_info_file):
-        with open(genomes_info_file, "a") as g:
-            for genome, kegg_taxonomy in ncbi_to_kegg_mapping.items():
-                print(genome+fasta_extension, kegg_taxonomy, "", file=g, sep="\t")
-
-        print("The {} file has been updated with {} genome(s) taxonomy indications, using '{}' extension.".format(genomes_info_file, str(len(ncbi_to_kegg_mapping)), fasta_extension))      
+        print("Instruction file ALREADY EXISTS")
     else:
-        print(f"""{genomes_info_file} path does not lead to KEMET 'genomes.instruction' file.
-            Be sure to use the proper command to set KEMET working directory first.
-            If this message still gets printed, double check the indicated path.
-            """)
+        with open(genomes_info_file, "w") as f:
+            print("id", "taxonomy", "universe", sep="\t", file=f)
+            for genome, kegg_taxonomy in ncbi_to_kegg_mapping.items():
+                print(genome+fasta_extension, kegg_taxonomy, "", file=f, sep="\t")
+        print("genome_instruction file GENERATED")
+
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
