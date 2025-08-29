@@ -2546,6 +2546,13 @@ if __name__ == "__main__":
     gapfilled_model_directory = dir_output+"/models_gapfilled/"
     de_novo_model_directory = dir_output+"/de_novo_models/"
 
+    if not os.path.exists(taxa_dir):
+        os.mkdir(taxa_dir)
+    if not os.path.exists(dir_base_KO):
+        os.mkdir(dir_base_KO)
+    if not os.path.exists(bigg_api):
+        os.mkdir(bigg_api)
+        
     if not os.path.exists(report_txt_directory):
         os.mkdir(report_txt_directory)
     if not os.path.exists(report_tsv_directory):
