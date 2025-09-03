@@ -2532,7 +2532,7 @@ if __name__ == "__main__":
     DB_directory = kemet_dir+"DB/"
 
     dir_genomes = os.path.dirname(os.path.realpath(args.FASTA_file))
-    dir_output = args.path_output.rstrip("/")
+    dir_output = os.path.abspath(args.path_output)
     report_txt_directory = dir_output+"/reports_txt/"
     report_tsv_directory = dir_output+"/reports_tsv/"
     ktests_directory = dir_output+"/ktests/"
@@ -2657,7 +2657,7 @@ if __name__ == "__main__":
         base_com_nhmmer = base_com_nhmmer+" 2>&1"
 
 #### HMM - READ AND WRITE INSTRUCTIONS
-    os.chdir(args.path_output)
+    os.chdir(dir_output)
     with open(instruction_file) as f:
         for line in f.readlines()[1:]:
             if line.startswith(fasta_file_name+fasta_extension): # guido
@@ -2671,7 +2671,7 @@ if __name__ == "__main__":
                 taxonomy = line[1]
                 taxa_file = taxonomy+".keg"
                 if args.hmm_mode == "modules":
-                    os.chdir(args.path_output)
+                    os.chdir(dir_output)
                     tuple_modules = create_tuple_modules(fixed_module_file)
                     write_KOs_from_modules(fasta_file_name, tuple_modules, report_txt_directory, klists_directory)
                 if args.hmm_mode == "onebm":

@@ -11,48 +11,48 @@ def kegg_taxonomy_from_gtdbtk_NCBI_mapping(ncbi_from_gtdb_file, genomes_info_fil
     rank_prefixes = ["d__","p__", "c__", "o__", "f__", "g__", "s__"]
     excluded_phyla = [
         "Abditibacteriota",
-        "Armatimonadetes",
+        "Armatimonadota",
         "Atribacterota",
-        "Balneolaeota",
-        "Caldiserica",
-        "Calditrichaeota",
-        "Chrysiogenetes",
+        "Balneolota",
+        "Caldisericota",
+        "Calditrichota",
+        "Chrysiogenota",
         "Coprothermobacterota",
-        "Dictyoglomi",
-        "Fibrobacteres",
-        "Ignavibacteriae",
-        "Kiritimatiellaeota",
-        "Lentisphaerae",
-        "Nanoarchaeota",
-        "Nitrospinae",
-        "Rhodothermaeota",
+        "Dictyoglomota",
+        "Fibrobacterota",
+        "Ignavibacteriota",
+        "Kiritimatiellota",
+        "Lentisphaerota",
+        "Nanobdellota",
+        "Nitrospinota",
+        "Rhodothermota",
     ]
 
     ncbi_kegg_common_phyla = [
-        "Acidobacteria",
-        "Actinobacteria",
-        "Aquificae",
-        "Bacteroidetes",
-        "Chlamydiae",
-        "Chlorobi",
-        "Chloroflexi",
-        "Crenarchaeota",
-        "Cyanobacteria",
-        "Deferribacteres",
-        "Deinococcus-Thermus",
-        "Elusimicrobia",
-        "Euryarchaeota",
-        "Fusobacteria",
-        "Gemmatimonadetes",
-        "Nitrospirae",
-        "Planctomycetes",
-        "Spirochaetes",
-        "Synergistetes",
-        "Tenericutes",
+        "Acidobacteriota",
+        "Actinomycetota",
+        "Aquificota",
+        "Bacteroidota",
+        "Chlamydiota",
+        "Chlorobiota",
+        "Chloroflexota",
+        "Thermoproteota",
+        "Cyanobacteriota",
+        "Deferribacterota",
+        "Deinococcota",
+        "Elusimicrobiota",
+        "Methanobacteriota",
+        "Fusobacteriota",
+        "Gemmatimonadota",
+        "Nitrospirota",
+        "Planctomycetota",
+        "Spirochaetota",
+        "Synergistota",
+        "Mycoplasmatota",
         "Thaumarchaeota",
-        "Thermodesulfobacteria",
-        "Thermotogae",
-        "Verrucomicrobia",
+        "Thermodesulfobacteriota",
+        "Thermotogota",
+        "Verrucomicrobiota",
     ]
 
     ncbi_to_kegg_mapping = {}
@@ -63,11 +63,16 @@ def kegg_taxonomy_from_gtdbtk_NCBI_mapping(ncbi_from_gtdb_file, genomes_info_fil
         for linum, line in enumerate(f):
             line = line.strip().split("\t")
             if linum == 0:
-                ncbi_header = line.index("NCBI classification")
+                ncbi_header = line.index("Majority vote NCBI classification")
                 continue
 
             genome = line[0]
             ncbi_taxonomy = line[ncbi_header]
+            
+            if ncbi_taxonomy == 'Unclassified':
+                genomes_lacking_info.append(genome)
+                continue
+            
             for rank in rank_prefixes:
                 ncbi_taxonomy = re.sub(rank, "", ncbi_taxonomy)
             _domain, _phylum, _class, _order, _family, _genus, _species = ncbi_taxonomy.split(";")
@@ -83,28 +88,26 @@ def kegg_taxonomy_from_gtdbtk_NCBI_mapping(ncbi_from_gtdb_file, genomes_info_fil
             if _phylum in ncbi_kegg_common_phyla:
                 ncbi_to_kegg_mapping.update({genome : _phylum})
 
-            if _phylum == "Proteobacteria":
+            if _phylum == "Pseudomonadota":
                 if (_class == "Alphaproteobacteria"
                     or _class == "Betaproteobacteria"
                     or _class == "Deltaproteobacteria"
-                    or _class == "Epsilonproteobacteria"
                     ):
                     ncbi_to_kegg_mapping.update({genome : _class})
                 elif _class == "Gammaproteobacteria":
                     if _order == "Enterobacteriales":
                         ncbi_to_kegg_mapping.update({genome : "Gammaproteobacteria - Enterobacteria"})
                     else:
-                        ncbi_to_kegg_mapping.update({genome : "Gammaproteobacteria - Others"})
+                        ncbi_to_kegg_mapping.update({genome : "other Gammaproteobacteria"})
                 else:
-                    ncbi_to_kegg_mapping.update({genome : "Other Proteobacteria"})
+                    ncbi_to_kegg_mapping.update({genome : "other Pseudomonadota"})
 
             if _phylum == "Firmicutes":
                 if (_class == "Bacilli"
                     or _class == "Clostridia"
                     ):
-                    ncbi_to_kegg_mapping.update({genome : f"{_phylum} - {_class}"})
-                else:
-                    ncbi_to_kegg_mapping.update({genome : "Firmicutes - Others"})
+                    ncbi_to_kegg_mapping.update({genome : _class})
+                
     if verbose:
         for genome in genomes_lacking_info:
             print(f"{genome} not included: minimum taxonomy information lacking. Check script help page (-h).")
