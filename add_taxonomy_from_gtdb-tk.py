@@ -41,7 +41,6 @@ def kegg_taxonomy_from_gtdbtk_NCBI_mapping(ncbi_from_gtdb_file, genomes_info_fil
         "Deferribacterota",
         "Deinococcota",
         "Elusimicrobiota",
-        "Methanobacteriota",
         "Fusobacteriota",
         "Gemmatimonadota",
         "Nitrospirota",
@@ -102,11 +101,14 @@ def kegg_taxonomy_from_gtdbtk_NCBI_mapping(ncbi_from_gtdb_file, genomes_info_fil
                 else:
                     ncbi_to_kegg_mapping.update({genome : "other Pseudomonadota"})
 
-            if _phylum == "Firmicutes":
+            if _phylum == "Bacillota":
                 if (_class == "Bacilli"
                     or _class == "Clostridia"
                     ):
                     ncbi_to_kegg_mapping.update({genome : _class})
+
+            if _phylum == "Euryarchaeota":
+                ncbi_to_kegg_mapping.update({genome : "Methanobacteriota"})
                 
     if verbose:
         for genome in genomes_lacking_info:
