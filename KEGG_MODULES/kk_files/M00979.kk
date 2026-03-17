@@ -1,0 +1,11 @@
+M00979	Ajmaline biosynthesis, geissoschizine => ajmaline
+K27776
+K08233
+K12694
+K22326
+K27777
+K27778
+K21026
+K27779
+COMPLEXES_LIST
+OPTIONAL_LIST
